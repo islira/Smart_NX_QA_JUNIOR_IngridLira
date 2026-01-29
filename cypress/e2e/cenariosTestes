@@ -1,0 +1,99 @@
+Feature: Login no sistema OrangeHRM
+Como usuário do sistema 
+Quero realizar login na aplicação
+Para acessar as funcionalidades disponíveis 
+
+Scenario: Login com sucesso 
+Given que estou na página de login do OrangeHRM 
+And informo o username "Admin" 
+And informo o password "admin123" 
+When clico no botão "Login" 
+Then devo ser autenticado com sucesso 
+And devo visualizar a página inicial do sistema 
+
+Scenario: Login sem fornecer usuário e senha 
+Given que estou na página de login do OrangeHRM 
+And não informo o username 
+And não informo o password When clico no botão "Login" 
+Then devo visualizar a mensagem de erro "Required" 
+
+
+Scenario: Login com credenciais inválidas 
+Given que estou na página de login do OrangeHRM
+And informo o username "usuarioInvalido" 
+And informo o password "senhaErrada" When clico no botão "Login" 
+Then devo visualizar a mensagem de erro "Invalid credentials"
+
+
+------
+Feature: Gerenciamento de Employee no OrangeHRM
+  Como administrador do sistema
+  Quero cadastrar, editar e excluir um employee
+  Para manter o controle atualizado dos trabalhadores
+
+  Background:
+    Given que estou logado no OrangeHRM com usuário "Admin" e senha "admin123"
+    And acesso a página de PIM
+
+  Scenario: Cadastrar um novo employee com login habilitado
+    When clico no botão "+ Add"
+    And preencho o campo "First Name" com "João"
+    And preencho o campo "Middle Name" com "Carlos"
+    And preencho o campo "Last Name" com "Silva"
+    And preencho o campo "Employee Id" com "12345"
+    And marco a opção "Create Login Details"
+    And preencho o campo "Username" com "joaosilva"
+    And preencho o campo "Password" com "senha123"
+    And preencho o campo "Confirm Password" com "senha123"
+    And marco a opção "Enable" em Status
+    And clico em "Save"
+    Then devo visualizar o cadastro do employee "João Carlos Silva" com sucesso
+
+  Scenario: Cadastrar um novo employee sem login habilitado
+    When clico no botão "+ Add"
+    And preencho o campo "First Name" com "Maria"
+    And preencho o campo "Middle Name" com "Fernanda"
+    And preencho o campo "Last Name" com "Souza"
+    And preencho o campo "Employee Id" com "67890"
+    And não marco a opção "Create Login Details"
+    And clico em "Save"
+    Then devo visualizar o cadastro do employee "Maria Fernanda Souza" com sucesso
+
+  Scenario: Editar um employee existente
+    Given que o employee "João Carlos Silva" já está cadastrado
+    When seleciono o employee "João Carlos Silva" na lista
+    And clico em "Edit"
+    And altero o campo "Last Name" para "Santos"
+    And clico em "Save"
+    Then devo visualizar o employee atualizado como "João Carlos Santos"
+
+   Feature: Pesquisa de módulos no OrangeHRM
+  Como administrador do sistema
+  Quero pesquisar módulos pelo campo de busca
+  Para acessar rapidamente as funcionalidades desejadas
+
+  Background:
+    Given que estou logado no OrangeHRM com usuário "Admin" e senha "admin123"
+    And abro o menu principal
+
+  Scenario: Pesquisar o módulo “PIM”
+    When digito "PIM" no campo de busca
+    Then devo visualizar o módulo "PIM" listado nos resultados
+
+  Scenario: Pesquisar um módulo diferente de “PIM”
+    When digito "Dashboard" no campo de busca
+    Then devo visualizar o módulo "Dashboard" listado nos resultados
+    And não devo visualizar o módulo "PIM" nos resultados
+
+  Scenario: Apagar a pesquisa
+    Given que digitei "PIM" no campo de busca
+    When apago o conteúdo do campo de busca
+    Then os resultados da pesquisa devem ser limpos
+    And devo visualizar a lista padrão de módulos do menu
+
+  Scenario: Acessar o módulo “PIM”
+    Given que pesquisei "PIM" no campo de busca
+    When clico no resultado "PIM"
+    Then devo ser direcionado para a página do módulo "PIM"
+    And devo visualizar a seção "Employee Information"
+ 

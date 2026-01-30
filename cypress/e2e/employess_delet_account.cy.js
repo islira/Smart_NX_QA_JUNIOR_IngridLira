@@ -11,7 +11,21 @@ describe('Exclusão de Employee no módulo PIM', () => {
 
     // Acessar módulo PIM
     cy.visit('https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmployeeList')
+  
+  // Reutilizável: pesquisa por nome no filtro
+  const searchByName = (name) => {
+    cy.get('input[placeholder="Type for hints..."]').clear().type(name)
+    cy.contains('Search').click()
+  }
+
+  beforeEach(() => {
+    // Filtrar por Carlos antes de cada teste
+    searchByName('Carlos')
+    cy.contains('Carlos').should('exist')
   })
+
+
+})
 
   it('Cancelar a exclusão de um employee', () => {
     // Localizar o employee (ajuste o nome conforme o cadastro existente)

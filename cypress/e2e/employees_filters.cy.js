@@ -14,10 +14,8 @@ describe('Filtragem de Employees no módulo PIM', () => {
   })
 
   it('Pesquisar um employee pelo nome', () => {
-    // campo Employee Name (autocomplete)
-    cy.get('oxd-autocomplete-text-input oxd-autocomplete-text-input--active"]').type('Carlos')
-    cy.contains('Search').click()
-
+    // Reaproveita a função de pesquisa
+    searchByName('Carlos')
     // validar resultado
     cy.contains('Carlos').should('exist')
   })

@@ -44,8 +44,8 @@ describe('Cadastro de Employee no módulo PIM', () => {
     // Preencher campos de login 
     const username = `carlos.silva.${Date.now()}`
     const password = 'Str0ngP@ssw0rd!'
-    cy.get('.oxd-input oxd-input--active').clear()
-    cy.get('.oxd-input oxd-input--active').clear().type(password)
+    cy.get('input[placeholder="Username"]').clear().type(username)
+    cy.get('input[placeholder="Password"]').clear().type(password)
     cy.get('input[placeholder="Confirm Password"]').clear().type(password)
 
     cy.contains('Save').click() // validar se colaborador aparece na lista

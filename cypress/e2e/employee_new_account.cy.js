@@ -36,10 +36,31 @@ describe('Cadastro de Employee no módulo PIM', () => {
     cy.get('input[name="firstName"]').type('Carlos') 
     cy.get('input[name="middleName"]').type('Alberto') 
     cy.get('input[name="lastName"]').type('Silva') 
-    cy.get('.oxd-input-group input').eq(3).clear().type('12345') // Employee Id // não marcar Create Login Details
+    cy.get('.oxd-input-group input').eq(3).clear().type('12345') // Employee Id
+
+    // Habilitar campos de login
+    cy.get('.oxd-switch-input').click()
+
+    // Preencher campos de login 
+    const username = `carlos.silva.${Date.now()}`
+    const password = 'Str0ngP@ssw0rd!'
+    cy.get('input[placeholder="Username"]').clear().type(username)
+    cy.get('input[placeholder="Password"]').clear().type(password)
+    cy.get('input[placeholder="Confirm Password"]').clear().type(password)
+
     cy.contains('Save').click() // validar se colaborador aparece na lista
-    //  cy.contains('Carlos Alberto Silva').should('exist')
-     })
+
+    // Salvar dados do colaborador para uso posterior
+    const employee = {
+      firstName: 'Carlos',
+      middleName: 'Alberto',
+      lastName: 'Silva',
+      fullName: 'Carlos Alberto Silva',
+      employeeId: '12345',
+      username
+    }
+    cy.writeFile('cypress/fixtures/last_employee.json', employee)
+  })
 
   it('4. Validar tentativa de cadastro com Employee ID já existente', () => {
     cy.contains('Add').click()
@@ -47,7 +68,7 @@ describe('Cadastro de Employee no módulo PIM', () => {
     cy.get('input[name="lastName"]').type('Silva')
     cy.get('.oxd-input-group input').eq(3).type('12345') // ID já existente
     cy.contains('Save').click()
-    cy.get('.oxd-input-group__message').should('contain', 'Already exists') // ajustar conforme mensagem real
+    cy.get('.oxd-input-group__message').should( 'Already exists') // ajustar conforme mensagem real
   })
 
   it('5. Cadastrar um employee sem dados de login', () => {
